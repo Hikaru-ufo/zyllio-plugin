@@ -22,13 +22,19 @@ const WeekIcon = `
 </svg>
 `;
 
-// Classe de la fonction
+// Classe de la fonction (version simplifiée)
 class WeekNumberFunction {
     execute(properties) {
+        console.log('🔄 Execution de la fonction Numéro de semaine');
+        console.log('📝 Propriétés reçues:', properties);
+        
         try {
             // Récupération de la propriété date
             const dateProperty = properties.find(p => p.id === 'date');
+            console.log('📅 Propriété date trouvée:', dateProperty);
+            
             if (!dateProperty || !dateProperty.value) {
+                console.log('⚠️ Aucune date fournie, retour 0');
                 return 0;
             }
 
@@ -39,18 +45,22 @@ class WeekNumberFunction {
             } else if (dateProperty.value instanceof Date) {
                 date = dateProperty.value;
             } else {
+                console.log('⚠️ Format de date non reconnu:', typeof dateProperty.value);
                 return 0;
             }
 
             // Vérification de la validité de la date
             if (isNaN(date.getTime())) {
+                console.log('⚠️ Date invalide');
                 return 0;
             }
 
             // Calcul du numéro de semaine selon ISO 8601
-            return this.getISOWeekNumber(date);
+            const weekNumber = this.getISOWeekNumber(date);
+            console.log(`✅ Numéro de semaine calculé: ${weekNumber} pour la date ${date.toISOString()}`);
+            return weekNumber;
         } catch (error) {
-            console.error('Erreur lors du calcul du numéro de semaine:', error);
+            console.error('❌ Erreur lors du calcul du numéro de semaine:', error);
             return 0;
         }
     }
@@ -83,10 +93,11 @@ const WeekNumberMetadata = {
     properties: [{
         id: 'date',
         name: 'Date',
-        type: 'date',
-        tooltip: 'Sélectionnez la date pour obtenir son numéro de semaine (norme ISO 8601 - semaine 1 à 53)',
+        type: 'row-variable', // Changé de 'date' vers 'row-variable'
+        tooltip: 'Sélectionnez la variable contenant la date pour obtenir son numéro de semaine (norme ISO 8601 - semaine 1 à 53)',
         default: '',
-        main: true
+        main: true,
+        write: false // Ajouté pour indiquer que c'est en lecture seule
     }]
 };
 
