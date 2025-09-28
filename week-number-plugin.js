@@ -1,7 +1,18 @@
 /**
- * Plugin Zyllio - Numéro de semaine (Version JavaScript pure)
+ * Plugin Zyllio - Fonctions Date Avancées
+ * Développé par Hikaru-ufo
  * Prêt à utiliser directement, sans compilation !
  */
+
+// Métadonnées du plugin
+const PLUGIN_INFO = {
+    name: "Fonctions Date Avancées",
+    version: "1.0.0",
+    author: "Hikaru-ufo",
+    description: "Plugin pour calculs de dates avancés"
+};
+
+console.log(`🚀 Chargement du plugin "${PLUGIN_INFO.name}" v${PLUGIN_INFO.version} par ${PLUGIN_INFO.author}`);
 
 // Icône SVG pour la fonction
 const WeekIcon = `
@@ -73,7 +84,7 @@ const WeekNumberMetadata = {
         id: 'date',
         name: 'Date',
         type: 'date',
-        tooltip: 'La date pour laquelle calculer le numéro de semaine (norme ISO 8601)',
+        tooltip: 'Sélectionnez la date pour obtenir son numéro de semaine (norme ISO 8601 - semaine 1 à 53)',
         default: '',
         main: true
     }]
@@ -81,4 +92,19 @@ const WeekNumberMetadata = {
 
 // Instance et enregistrement de la fonction
 const weekNumberFunctionInstance = new WeekNumberFunction();
-zySdk.services.registry.registerFunction(WeekNumberMetadata, weekNumberFunctionInstance);
+
+// Vérifier que zySdk est disponible avant d'enregistrer
+if (typeof zySdk !== 'undefined' && zySdk.services && zySdk.services.registry) {
+    console.log(`✅ Enregistrement de la fonction "${WeekNumberMetadata.label}"...`);
+    zySdk.services.registry.registerFunction(WeekNumberMetadata, weekNumberFunctionInstance);
+    console.log(`🎉 Plugin "${PLUGIN_INFO.name}" chargé avec succès !`);
+    console.log(`📅 Fonction "${WeekNumberMetadata.label}" disponible dans la catégorie "${WeekNumberMetadata.category}"`);
+} else {
+    console.error(`❌ zySdk non disponible - impossible de charger le plugin "${PLUGIN_INFO.name}"`);
+    console.error('Vérifiez que vous êtes bien dans Zyllio Studio');
+}
+
+// Export des informations du plugin pour Zyllio
+if (typeof window !== 'undefined') {
+    window.ZYLLIO_PLUGIN_INFO = PLUGIN_INFO;
+}
