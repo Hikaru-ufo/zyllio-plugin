@@ -1,5 +1,5 @@
 /**
- * Plugin Zyllio - Numéro de Semaine
+ * Plugin Zyllio - Numéro de Semaine 2
  * Métadonnées strictement conformes au SDK
  */
 
@@ -86,6 +86,7 @@ const WeekNumberMetadata = {
     icon: WeekIcon,
     label: 'Numéro de semaine',
     category: 'Date',
+    format: 'number',  // Format de retour
     properties: [{
         id: 'date',  // Simplifié
         name: 'Date',
