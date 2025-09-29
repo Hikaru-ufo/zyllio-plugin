@@ -4,17 +4,17 @@
  */
 const PLUGIN_INFO = {
     name: "Fonctions Date Avancées",
-    version: "1.1.0",
+    version: "1.2.0",
     author: "Hikaru-ufo",
-    description: "Plugin pour calculs de dates avancés"
+    description: "Plugin pour calculs de dates avancés (numéro de semaine ISO 8601)"
 };
 console.log(`🚀 Chargement du plugin "${PLUGIN_INFO.name}" v${PLUGIN_INFO.version}`);
 
-// Icône SVG
+// Icône SVG (avec currentColor)
 const WeekIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="#cccccc">
-<path d="M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z" />
-<text x="12" y="15" text-anchor="middle" font-size="8" fill="#666">W</text>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z" />
+  <text x="12" y="15" text-anchor="middle" font-size="8" fill="currentColor">W</text>
 </svg>
 `;
 
@@ -86,16 +86,17 @@ class WeekNumberFunction {
     }
 }
 
-// Métadonnées de la fonction
+// Métadonnées de la fonction (avec format: 'number')
 const WeekNumberMetadata = {
     id: 'week-number',
     icon: WeekIcon,
     label: 'Numéro de semaine',
     category: 'Date',
+    format: 'number',  // Format de retour
     properties: [{
         id: 'inputDate',
         name: 'Date',
-        type: 'date',  // ou 'variable' si nécessaire
+        type: 'date',
         tooltip: 'Sélectionnez la date ou la variable contenant la date',
         default: '',
         main: true,
