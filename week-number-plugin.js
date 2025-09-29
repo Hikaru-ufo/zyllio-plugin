@@ -1,20 +1,18 @@
 /**
  * Plugin Zyllio - Fonctions Date Avancées
- * Développé par Hikaru-ufo
- * Prêt à utiliser directement, sans compilation !
+ * Version corrigée avec services Zyllio
  */
 
-// Métadonnées du plugin
 const PLUGIN_INFO = {
     name: "Fonctions Date Avancées",
-    version: "1.0.0",
+    version: "1.1.0",
     author: "Hikaru-ufo",
     description: "Plugin pour calculs de dates avancés"
 };
 
-console.log(`🚀 Chargement du plugin "${PLUGIN_INFO.name}" v${PLUGIN_INFO.version} par ${PLUGIN_INFO.author}`);
+console.log(`🚀 Chargement du plugin "${PLUGIN_INFO.name}" v${PLUGIN_INFO.version}`);
 
-// Icône SVG pour la fonction
+// Icône SVG
 const WeekIcon = `
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="#cccccc">
 <path d="M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z" />
@@ -22,30 +20,49 @@ const WeekIcon = `
 </svg>
 `;
 
-// Classe de la fonction (version simplifiée)
+// Classe de la fonction
 class WeekNumberFunction {
     execute(properties) {
-        console.log('🔄 Execution de la fonction Numéro de semaine');
+        console.log('🔄 Fonction Numéro de semaine appelée');
         console.log('📝 Propriétés reçues:', properties);
         
         try {
             // Récupération de la propriété date
-            const dateProperty = properties.find(p => p.id === 'date');
-            console.log('📅 Propriété date trouvée:', dateProperty);
+            const dateProperty = properties.find(p => p.id === 'inputDate');
+            console.log('📅 Propriété date:', dateProperty);
             
-            if (!dateProperty || !dateProperty.value) {
-                console.log('⚠️ Aucune date fournie, retour 0');
+            if (!dateProperty) {
+                console.log('⚠️ Propriété date non trouvée');
+                return 0;
+            }
+
+            // Utiliser le service dictionary pour récupérer la valeur
+            let dateValue;
+            if (typeof zySdk !== 'undefined' && zySdk.services && zySdk.services.dictionary) {
+                dateValue = zySdk.services.dictionary.getValue(dateProperty);
+                console.log('📊 Valeur récupérée via dictionary:', dateValue);
+            } else {
+                // Fallback si le service n'est pas disponible
+                dateValue = dateProperty.value;
+                console.log('📊 Valeur récupérée directement:', dateValue);
+            }
+            
+            if (!dateValue) {
+                console.log('⚠️ Aucune valeur de date fournie');
                 return 0;
             }
 
             // Conversion en objet Date
             let date;
-            if (typeof dateProperty.value === 'string') {
-                date = new Date(dateProperty.value);
-            } else if (dateProperty.value instanceof Date) {
-                date = dateProperty.value;
+            if (typeof dateValue === 'string') {
+                date = new Date(dateValue);
+            } else if (dateValue instanceof Date) {
+                date = dateValue;
+            } else if (typeof dateValue === 'number') {
+                // Timestamp
+                date = new Date(dateValue);
             } else {
-                console.log('⚠️ Format de date non reconnu:', typeof dateProperty.value);
+                console.log('⚠️ Type de date non reconnu:', typeof dateValue);
                 return 0;
             }
 
@@ -57,21 +74,19 @@ class WeekNumberFunction {
 
             // Calcul du numéro de semaine selon ISO 8601
             const weekNumber = this.getISOWeekNumber(date);
-            console.log(`✅ Numéro de semaine calculé: ${weekNumber} pour la date ${date.toISOString()}`);
+            console.log(`✅ Numéro de semaine: ${weekNumber} pour ${date.toISOString()}`);
             return weekNumber;
+            
         } catch (error) {
-            console.error('❌ Erreur lors du calcul du numéro de semaine:', error);
+            console.error('❌ Erreur:', error);
             return 0;
         }
     }
 
     /**
-     * Calcule le numéro de semaine selon la norme ISO 8601
-     * @param {Date} date - La date à traiter
-     * @returns {number} Le numéro de semaine (1-53)
+     * Calcule le numéro de semaine selon ISO 8601
      */
     getISOWeekNumber(date) {
-        // Copie de la date pour éviter les mutations
         const target = new Date(date.valueOf());
         const dayNr = (date.getDay() + 6) % 7;
         target.setDate(target.getDate() - dayNr + 3);
@@ -91,31 +106,28 @@ const WeekNumberMetadata = {
     label: 'Numéro de semaine',
     category: 'Date',
     properties: [{
-        id: 'date',
+        id: 'inputDate',  // ID clair pour le paramètre
         name: 'Date',
-        type: 'row-variable', // Changé de 'date' vers 'row-variable'
-        tooltip: 'Sélectionnez la variable contenant la date pour obtenir son numéro de semaine (norme ISO 8601 - semaine 1 à 53)',
+        type: 'row-variable',  // row-variable pour permettre la sélection de variables
+        tooltip: 'Sélectionnez la variable ou le champ contenant la date',
         default: '',
         main: true,
-        write: false // Ajouté pour indiquer que c'est en lecture seule
+        write: false
     }]
 };
 
-// Instance et enregistrement de la fonction
-const weekNumberFunctionInstance = new WeekNumberFunction();
-
-// Vérifier que zySdk est disponible avant d'enregistrer
+// Enregistrement
 if (typeof zySdk !== 'undefined' && zySdk.services && zySdk.services.registry) {
     console.log(`✅ Enregistrement de la fonction "${WeekNumberMetadata.label}"...`);
-    zySdk.services.registry.registerFunction(WeekNumberMetadata, weekNumberFunctionInstance);
+    const weekNumberInstance = new WeekNumberFunction();
+    zySdk.services.registry.registerFunction(WeekNumberMetadata, weekNumberInstance);
     console.log(`🎉 Plugin "${PLUGIN_INFO.name}" chargé avec succès !`);
-    console.log(`📅 Fonction "${WeekNumberMetadata.label}" disponible dans la catégorie "${WeekNumberMetadata.category}"`);
+    console.log(`📅 Fonction disponible dans la catégorie "${WeekNumberMetadata.category}"`);
 } else {
-    console.error(`❌ zySdk non disponible - impossible de charger le plugin "${PLUGIN_INFO.name}"`);
-    console.error('Vérifiez que vous êtes bien dans Zyllio Studio');
+    console.error(`❌ zySdk non disponible`);
 }
 
-// Export des informations du plugin pour Zyllio
+// Export des infos
 if (typeof window !== 'undefined') {
     window.ZYLLIO_PLUGIN_INFO = PLUGIN_INFO;
 }
