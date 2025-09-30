@@ -6,7 +6,7 @@
 // Informations du plugin
 const PLUGIN_INFO = {
     name: "Fonctions Date Avancées",
-    version: "1.0.0",
+    version: "1.0.1",
     author: "Hikaru-ufo"
 };
 
