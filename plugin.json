@@ -1,7 +1,9 @@
 {
   "name": "Fonctions Date Avancées",
   "version": "1.0.2",
-  "author": "Hikaru-ufo",
+  "author": "Hikaru.ufo",
+  "developer": "Hikaru",
+  "creator": "Serenitix",
   "description": "Plugin pour calculer le numéro de semaine",
   "functions": ["week-number"]
 }
