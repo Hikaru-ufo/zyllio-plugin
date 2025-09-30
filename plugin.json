@@ -1,0 +1,7 @@
+{
+  "name": "Fonctions Date Avancées",
+  "version": "1.0.0",
+  "author": "Hikaru-ufo",
+  "description": "Plugin pour calculer le numéro de semaine",
+  "functions": ["week-number"]
+}
