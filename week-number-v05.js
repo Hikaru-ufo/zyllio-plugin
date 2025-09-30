@@ -6,9 +6,18 @@
 // Informations du plugin
 const PLUGIN_INFO = {
     name: "Fonctions Date Avancées",
-    version: "1.0.1",
-    author: "Hikaru-ufo"
+    version: "2.0.0",  // VERSION AUGMENTÉE POUR IDENTIFIER
+    author: "Hika",
+    buildDate: "2025-01-20 15:30"  // Date de build pour tracer
 };
+
+console.log('========================================');
+console.log('CHARGEMENT PLUGIN ZYLLIO');
+console.log(`Nom: ${PLUGIN_INFO.name}`);
+console.log(`Version: ${PLUGIN_INFO.version}`);
+console.log(`Auteur: ${PLUGIN_INFO.author}`);
+console.log(`Build: ${PLUGIN_INFO.buildDate}`);
+console.log('========================================');
 
 console.log(`Chargement plugin ${PLUGIN_INFO.name} v${PLUGIN_INFO.version}...`);
 
@@ -93,6 +102,7 @@ const WeekNumberMetadata = {
     icon: WeekIcon,
     label: 'Numéro de semaine',
     category: 'Date',
+    format: 'number', 
     properties: [{
         id: 'date',  // Simplifié
         name: 'Date',
@@ -101,7 +111,7 @@ const WeekNumberMetadata = {
         default: '',
         main: true
         // PAS de write: false !
-        // PAS de format: 'number' !
+       
     }]
 };
 
