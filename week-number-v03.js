@@ -1,3 +1,15 @@
+// Métadonnées du plugin pour Zyllio
+const PLUGIN_METADATA = {
+    name: "Fonctions Date Avancées",
+    version: "1.0.0",
+    author: "Hikaru-ufo"
+};
+
+// Tentative d'export du nom
+if (typeof window !== 'undefined') {
+    window.ZYLLIO_PLUGIN_NAME = PLUGIN_METADATA.name;
+}
+
 /**
  * Plugin Zyllio - Numéro de Semaine 2
  * Métadonnées strictement conformes au SDK
